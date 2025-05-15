@@ -7,7 +7,7 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Data/model files (DON'T upload big raw data or model weights to GitHub)
-*.csv
+# *.csv
 *.h5
 *.pth
 
