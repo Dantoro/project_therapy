@@ -1,0 +1,48 @@
+==========================================================================================
+Layer (type)                    Output Shape            Param #     Trainable
+==========================================================================================
+HANHighwayDeep                  [2, 6]                 1,032,387   True
+├─InputLayer                    [2, 5, 20, 100]        0           True
+├─Word-level BiLSTM/Highway Stack
+│  ├─BiLSTM (LSTM)              [2, 5, 20, 128]        117,248     True
+│  ├─Highway                    [2, 5, 20, 128]        32,768      True
+│  ├─BiLSTM (LSTM)              [2, 5, 20, 128]        131,584     True
+│  ├─Highway                    [2, 5, 20, 128]        32,768      True
+│  └─WordAttention (Attention)  [2, 5, 128]            257         True
+├─Sentence-level BiLSTM/Highway Stack
+│  ├─BiLSTM (LSTM)              [2, 5, 128]            131,584     True
+│  ├─Highway                    [2, 5, 128]            32,768      True
+│  ├─BiLSTM (LSTM)              [2, 5, 128]            131,584     True
+│  ├─Highway                    [2, 5, 128]            32,768      True
+│  ├─TransformerEncoder         [2, 5, 128]            82,752      True
+│  └─SentenceAttention          [2, 128]               257         True
+├─Dense/Highway/Dropout Stack
+│  ├─Linear (Dense)             [2, 512]               66,048      True
+│  ├─Highway                    [2, 512]               131,584     True
+│  ├─Dropout                    [2, 512]               0           True
+│  ├─Linear (Dense)             [2, 256]               131,328     True
+│  ├─Highway                    [2, 256]               66,048      True
+│  ├─Dropout                    [2, 256]               0           True
+│  ├─Linear (Dense)             [2, 128]               32,896      True
+│  ├─Highway                    [2, 128]               16,384      True
+│  ├─Dropout                    [2, 128]               0           True
+│  ├─Linear (Dense)             [2, 128]               16,512      True
+│  ├─Highway                    [2, 128]               16,384      True
+│  ├─Dropout                    [2, 128]               0           True
+│  ├─Linear (Dense)             [2, 64]                8,256       True
+│  ├─Highway                    [2, 64]                8,192       True
+│  ├─Dropout                    [2, 64]                0           True
+│  ├─Linear (Dense)             [2, 32]                2,080       True
+│  ├─Highway                    [2, 32]                2,048       True
+├─Output (Linear)               [2, 6]                 198         True
+==========================================================================================
+Total params: 1,032,387
+Trainable params: 1,032,387
+Non-trainable params: 0
+==========================================================================================
+
+What’s happening here:
+“├─” and “│” show the nested module structure.
+You get the output shape after each block/layer, parameter count, and whether they’re trainable.
+The stack groups make clear the different phases: word-level, sentence-level, deep dense.
+You can control torchinfo.summary’s depth to see more or less detail for custom layers. This layout helps you visualize the shape, nesting, and scale of your model just like TensorFlow/Keras!

@@ -1,0 +1,18 @@
+# macOS cruft
+.DS_Store
+
+# Python/Notebook cruft
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Data/model files (DON'T upload big raw data or model weights to GitHub)
+*.csv
+*.h5
+*.pth
+
+# VSCode/IDE/project files (optional)
+.vscode/
+.idea/
+*.swp
+
