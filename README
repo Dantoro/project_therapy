@@ -1,0 +1,26 @@
+# Project Therapy
+
+A multi-stage NLP/NLU research project, with the goal of building a mental health/therapy chatbot. This repo features:
+
+- A deep emotion classifier (BiLSTM/HAN-based) using transformer-based sentence embeddings.
+- Plans for short-term and long-term conversational memory modules.
+- Decision logic and generative response modules for real-time, emotionally-aware conversation.
+
+**Current State:**  
+- Architecture and planning files for both baseline and advanced models.
+- Preprocessed emotion dataset for early prototyping.
+
+**Upcoming:**  
+- EDA notebook for dataset analysis.
+- Training scripts and model experiments.
+
+## Folder Structure
+
+- `beginner_mode/` — baseline dataset and models
+- `ideas/` — folder for big picture plans that are larger than any one component of the project 
+- `save_for_when_i_have_bigger_data/` — planned/advanced architectures and pseudocode
+
+## Contact
+
+Repo by [Dan Santoro](mailto:danrsantoro@gmail.com)
+
