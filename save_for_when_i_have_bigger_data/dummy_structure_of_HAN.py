@@ -24,21 +24,11 @@ class Attention(nn.Module):
 class HANHighwayDeep(nn.Module):
     def __init__(self):
         super().__init__()
-        # --- Word-level ---
-        self.word_bilstm1 = nn.LSTM(100, 64, bidirectional=True, batch_first=True)
-        self.word_highway1 = Highway(128)
-        self.word_bilstm2 = nn.LSTM(128, 64, bidirectional=True, batch_first=True)
-        self.word_highway2 = Highway(128)
-        self.word_attention = Attention(128)
-
-        # --- Sentence-level ---
-        self.sent_bilstm1 = nn.LSTM(128, 64, bidirectional=True, batch_first=True)
+        # --- Sentence-level BiLSTM + Highway + Attention ---
+        self.sent_bilstm1 = nn.LSTM(768, 64, bidirectional=True, batch_first=True)
         self.sent_highway1 = Highway(128)
         self.sent_bilstm2 = nn.LSTM(128, 64, bidirectional=True, batch_first=True)
         self.sent_highway2 = Highway(128)
-        # Transformer encoder block for sentences
-        encoder_layer = nn.TransformerEncoderLayer(d_model=128, nhead=4, batch_first=True)
-        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=1)
         self.sent_attention = Attention(128)
 
         # --- Deep Dense Stack with Highways and Dropouts ---
@@ -67,28 +57,14 @@ class HANHighwayDeep(nn.Module):
 
         self.output = nn.Linear(32, 6)
 
-    def forward(self, x):  # x: (batch, sents, words, feat)
-        # 1. Word-level BiLSTM+Highway+Attention per sentence (TimeDistributed)
-        sents = []
-        for i in range(x.shape[1]):  # Loop over sentences (5)
-            w = x[:, i, :, :]                 # (batch, 20, 100)
-            w, _ = self.word_bilstm1(w)       # (batch, 20, 128)
-            w = self.word_highway1(w)
-            w, _ = self.word_bilstm2(w)       # (batch, 20, 128)
-            w = self.word_highway2(w)
-            s = self.word_attention(w)        # (batch, 128)
-            sents.append(s)
-        sent_seq = torch.stack(sents, dim=1)  # (batch, 5, 128)
-
-        # 2. Sentence-level BiLSTM+Highway+Transformer+Attention
-        y, _ = self.sent_bilstm1(sent_seq)    # (batch, 5, 128)
+    def forward(self, x):  # x: (batch, num_sents, 768)
+        y, _ = self.sent_bilstm1(x)    # (batch, num_sents, 128)
         y = self.sent_highway1(y)
-        y, _ = self.sent_bilstm2(y)           # (batch, 5, 128)
+        y, _ = self.sent_bilstm2(y)    # (batch, num_sents, 128)
         y = self.sent_highway2(y)
-        y = self.transformer_encoder(y)       # (batch, 5, 128)
         doc_vec = self.sent_attention(y)      # (batch, 128)
 
-        # 3. Deep Dense + Highway + Dropout stack
+        # --- Deep Dense Stack with Highways and Dropouts ---
         z = F.relu(self.dense1(doc_vec))
         z = self.highway3(z)
         z = self.dropout1(z)
@@ -107,7 +83,11 @@ class HANHighwayDeep(nn.Module):
         z = F.relu(self.dense6(z))
         z = self.highway8(z)
 
-        # 4. Output
         out = self.output(z)
         return F.log_softmax(out, dim=-1)  # (batch, 6)
 
+# Summary:
+# SBERT does all word-level work in preprocessing.
+# Model starts at sentence-level BiLSTM + highways + attention.
+# Dense/highway stack and output are unchanged.
+# Way fewer parameters, way easier to train, but still powerful.

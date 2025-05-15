@@ -3,23 +3,21 @@
                                      └──────────────────────────┘
                                                  │
                                                  ▼
-                                  ┌───────────────────────────────┐
-                                  │ 1. Emotion Classifier (HAN)   │
-                                  │ ┌ Word-level BiLSTM + Attn   │
-                                  │ │                             │
-                                  │ └ Sentence-level BiLSTM +    │
-                                  │   Attn ─┬───────────────────┐│
-                                  │          ▼                   ││
-                                  │  + Transformer Encoder Block ││
-                                  │          │                   ││
-                                  │          └──► Outputs:        ││
-                                  │              • Emotion label ││
-                                  │              • Document vec  ││
-                                  └───────────────────────────────┘│
-                                                 │                 │
-                              ┌──────────────────┴──────────────┐  │
-                              │                                 │  │
-                              ▼                                 ▼  ▼
+                                  ┌───────────────────────────────────────────┐
+                                  │ 1. Emotion Classifier                     │
+                                  │   (Deep BiLSTM + Attention)               │
+                                  │ ┌ Sentence embeddings (SBERT/BERT)        │
+                                  │ ├ Stacked BiLSTM layers + Attention       │
+                                  │ └ (No transformer layer inside model)     │
+                                  │                                           │
+                                  │  Outputs:                                 │
+                                  │    • Emotion label (softmax)              │
+                                  │    • Document vector (embedding)          │
+                                  └───────────────────────────────────────────┘
+                                                 │
+                              ┌──────────────────┴──────────────┐
+                              │                                 │
+                              ▼                                 ▼
         ┌───────────────────────────────┐        ┌───────────────────────────┐
         │2. Short-Term Emotion Memory   │        │3. Long-Term Semantic      │
         │   (rolling buffer of last 10) │        │   Conversation Memory     │
