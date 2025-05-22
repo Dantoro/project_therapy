@@ -17,7 +17,7 @@ Maintain a short‐term emotion trend over the last 10 sentences using a **nonli
   * $0 < \alpha < 1$ is the **decay factor** (e.g. 0.8).
   * Older inputs fade exponentially; recent inputs dominate.
 * **Trend Extraction:**
-  $\text{trend}_t = \operatorname{arg\,max}(T_t)$
+  $\text{trend}_t = \argmax(T_t)$
   The index of the highest component in $T_t$ gives the **current emotion trend**.
 
 ---
