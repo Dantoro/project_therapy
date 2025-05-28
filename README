@@ -1,26 +1,50 @@
 # Project Therapy
 
-A multi-stage NLP/NLU research project, with the goal of building a mental health/therapy chatbot. This repo features:
+**A multi-stage, modular AI project for building a therapeutic chatbot with emotion understanding and memory.**
 
-- A deep emotion classifier (BiLSTM/HAN-based) using transformer-based sentence embeddings.
-- Plans for short-term and long-term conversational memory modules.
-- Decision logic and generative response modules for real-time, emotionally-aware conversation.
+---
 
-**Current State:**  
-- Architecture and planning files for both baseline and advanced models.
-- Preprocessed emotion dataset for early prototyping.
+## Overview
 
-**Upcoming:**  
-- EDA notebook for dataset analysis.
-- Training scripts and model experiments.
+Project Therapy is an experiment in modern NLP architectures for emotion classification and emotionally-aware conversational agents.  
+This project aims to build a robust, extensible pipeline including:
+
+- **Emotion Classification:** BiLSTM-based, using SBERT sentence embeddings, attention, and deep dense stacks.
+- **Short-Term Emotion Memory:** Nonlinear rolling trend (EMA) over recent emotions.
+- **Long-Term Conversational Memory:** Sequence-to-sequence "block" summarization for context compression.
+- **Chatbot Engine:** Decoder-only transformer (GPT-style), driven by both memory modules and a decision strategy.
+
+---
 
 ## Folder Structure
 
-- `beginner_mode/` — baseline dataset and models
-- `ideas/` — folder for big picture plans that are larger than any one component of the project 
-- `save_for_when_i_have_bigger_data/` — planned/advanced architectures and pseudocode
+- `beginner_mode/`  
+  Early prototyping and first-pass emotion classifier work.
+- `ideas/`  
+  Architecture diagrams, high-level design docs, trend algorithm plans, and data flow descriptions.
+- `save_for_when_i_have_bigger_data/`  
+  Prototype code and model drafts for future, more ambitious phases.
+
+---
+
+## Key Design Files
+
+- **Emotion Classifier**: `dummy_structure_of_BiLSTM.py` (see also visual/text breakdowns)
+- **System Design**:  
+  - `ideas/block_diagram_v2.md` (latest architecture diagram)
+  - `ideas/structure_description.md` (bulleted structure and data flow)
+  - `ideas/simple_emotion_trend_algorithm_plan.md` (trend-tracking logic)
+
+---
+
+## Status
+
+- Active **design & planning** phase.
+- Emotion classifier model next up for coding and experimentation in `beginner_mode/`.
+- All architectures subject to change as research continues.
+
+---
 
 ## Contact
 
-Repo by [Dan Santoro](mailto:danrsantoro@gmail.com)
-
+- Maintainer: [Dan Santoro (Dantoro)](mailto:danrsantoro@gmail.com)
