@@ -1,47 +1,113 @@
 # Project Therapy
 
-**A multi-stage, modular AI project for building a therapeutic chatbot with emotion understanding and memory.**
+**Project Therapy** is an open, modular research platform for building next-generation, emotionally intelligent chatbots.  
+It combines state-of-the-art natural language processing, emotion detection, and memory management into a single, extensible system—ideal for experimentation in AI-powered therapy, mental health support, or advanced conversational research.
 
 ---
 
-## Overview
+## Quick Overview
 
-Project Therapy is an experiment in modern NLP architectures for emotion classification and emotionally-aware conversational agents.  
-This project aims to build a robust, extensible pipeline including:
-
-- **Emotion Classification:** BiLSTM-based, using SBERT sentence embeddings, attention, and deep dense stacks.
-- **Short-Term Emotion Memory:** Nonlinear rolling trend (EMA) over recent emotions.
-- **Long-Term Conversational Memory:** Sequence-to-sequence "block" summarization for context compression.
-- **Chatbot Engine:** Decoder-only transformer (GPT-style), driven by both memory modules and a decision strategy.
+- **Emotion-Aware:** Uses transformer-based classification and advanced trend tracking to monitor user emotion in real time.
+- **Memory-Augmented:** Employs both short- and long-term conversational memory, combining detailed recent exchanges with high-level summaries of session history.
+- **Modular:** Each core component (emotion classifier, memory, trend tracker, chatbot, etc.) can be swapped or extended independently.
+- **Research-Ready:** Designed for easy prototyping, clear documentation, and transparency.
 
 ---
 
-## Folder Structure
+## Key Features
 
-- `beginner_mode/`  
-  Early prototyping and first-pass emotion classifier work.
-- `ideas/`  
-  Architecture diagrams, high-level design docs, trend algorithm plans, and data flow descriptions.
-- `save_for_when_i_have_bigger_data/`  
-  Prototype code and model drafts for future, more ambitious phases.
+- **EmotionClassifier:**  
+  - Cleans and analyzes user input at the character level (BiGRU), then classifies emotions using a transformer autoencoder.
+  - Outputs a 6D probability vector, tracks per-class derivatives, and maintains an EMA-based emotional trend.
+
+- **MemoryModule:**  
+  - **STM (Short-Term Memory):** Holds the last 10 user/bot exchanges, providing rich context for reasoning and summarization.
+  - **LTM (Long-Term Memory):** Stores summaries of prior conversations as "blocks," rotating as needed for efficient scaling.
+  - **TrendTracker:** Lightweight, real-time emotion tracking with nonlinear recency bias via EMA.
+
+- **HAN (Hierarchical Attention Network):**  
+  - Deep context modeling of recent conversation using GloVe, word2vec, and learned embeddings for STM window.
+
+- **Pipeline:**  
+  - At each user turn, the system fuses STM, LTM, trend signals, and HAN output to drive decision-making and response generation.
 
 ---
 
-## Key Design Files
+## Project Structure
 
-- **Emotion Classifier**: `dummy_structure_of_BiLSTM.py` (see also visual/text breakdowns)
-- **System Design**:  
-  - `ideas/block_diagram_v2.md` (latest architecture diagram)
-  - `ideas/structure_description.md` (bulleted structure and data flow)
-  - `ideas/simple_emotion_trend_algorithm_plan.md` (trend-tracking logic)
+project_therapy/
+├── datasets/ # Training/evaluation data
+├── ideas/
+│ ├── legacy/ # Archived diagrams, old flows, experimental code
+│ └── simple_emotion_trend_algorithm_plan.md
+│ └── ...other idea files...
+├── ideas/component_specific_ideas/
+│ └── emotion_classifier_logic.md
+│ └── memory_module_logic.md
+│ └── chatbot_logic.md (stub)
+│ └── decision_maker_logic.md (stub)
+├── README # This file
+└── ...code, scripts, and other folders as added...
+
+
+---
+
+## Getting Started
+
+1. **Install dependencies** (details to come as code is released)
+2. **See** `ideas/component_specific_ideas/emotion_classifier_logic.md` and `memory_module_logic.md` for detailed documentation of the core pipeline.
+3. **Check** `ideas/simple_emotion_trend_algorithm_plan.md` for the math, rationale, and pseudocode behind the TrendTracker module.
+4. **Legacy** designs and experiments live in `ideas/legacy/` for historical reference and inspiration.
+
+---
+
+## System Architecture
+
+**Current main data flow:**  
+User Input
+│
+└──> BiGRU Cleaner (character-level) ──> EmotionClassifier (transformer autoencoder)
+│
+└──> TrendTracker (EMA-based, rolling 10 steps)
+│
+└──> STM (last 10 user/bot pairs, plain text)
+│
+└──> HAN (word-level, GloVe + word2vec + learned embeddings, BiLSTM/attention)
+│
+└──> LTM (rotating buffer of 10 summary blocks, from seq2seq over STM)
+│
+└──> DecisionMaker (future module)
+│
+└──> Chatbot Engine (future module)
+
 
 ---
 
 ## Status
 
-- Active **design & planning** phase.
-- Emotion classifier model next up for coding and experimentation in `beginner_mode/`.
-- All architectures subject to change as research continues.
+- **EmotionClassifier:** Complete (architecture/design; implementation in progress)
+- **MemoryModule:** Complete (architecture/design; implementation in progress)
+- **HAN:** Design specified, implementation pending
+- **DecisionMaker & Chatbot:** Architecture outlined, implementation and docs coming soon
+
+---
+
+## Contributing
+
+*This project is in active research and development. Pull requests, issues, and suggestions are welcome once initial prototyping is complete.*
+
+---
+
+## License
+
+To be determined.
+
+---
+
+## Acknowledgments
+
+- Inspired by research in affective computing, memory-augmented neural networks, and therapeutic AI.
+- Special thanks to everyone providing feedback, advice, and technical guidance.
 
 ---
 

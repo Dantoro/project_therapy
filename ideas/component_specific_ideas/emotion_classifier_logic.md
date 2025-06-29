@@ -29,10 +29,16 @@ This document summarizes the architecture and logic for the **Emotion Classifier
 * **Purpose:** Clean and standardize each new user input before classification.
 * **Process:**
   * **Tokenization:**
-    * Tokenize the input sentence at the character level.
-    * Capture unigrams (single chars), bigrams (2-char combos), and trigrams (3-char combos).
+
+    * Tokenize the input sentence at the character (unigram) level.
     * Preserve all case, punctuation, and emoji.
+    * (Explicitly omitting bigrams/trigrams; the BiGRU learns n-gram context inherently.)
+  * **Data Flow:**
+
+    * The raw user input (`rawText`) is first processed by the character-level BiGRU to produce `cleanedText`.
+    * `cleanedText` is then passed to the transformer-based autoencoder (EmotionClassifier) for emotion classification.
   * **Model:**
+
     * A shallow BiGRU (Bidirectional Gated Recurrent Unit) sweeps over the sequence.
     * Its role is NOT to rewrite or alter text, but to help recognize typos, odd punctuation, and other “messy” features for robust downstream processing.
     * The cleaned text is passed forward unaltered for maximum transparency and user trust.
