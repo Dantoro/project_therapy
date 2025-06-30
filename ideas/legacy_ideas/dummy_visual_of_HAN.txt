@@ -1,0 +1,39 @@
+==========================================================================================
+Layer (type)                    Output Shape            Param #     Trainable
+==========================================================================================
+HANHighwayDeep                  [2, 6]                 695,259     True
+├─InputLayer                    [2, 5, 768]            0           True   # (SBERT: 768-dim sentence embeddings)
+├─Sentence-level BiLSTM/Highway Stack
+│  ├─BiLSTM (LSTM)              [2, 5, 128]            459,264     True
+│  ├─Highway                    [2, 5, 128]            32,768      True
+│  ├─BiLSTM (LSTM)              [2, 5, 128]            131,584     True
+│  ├─Highway                    [2, 5, 128]            32,768      True
+│  └─SentenceAttention          [2, 128]               257         True
+├─Dense/Highway/Dropout Stack
+│  ├─Linear (Dense)             [2, 512]               66,048      True
+│  ├─Highway                    [2, 512]               131,584     True
+│  ├─Dropout                    [2, 512]               0           True
+│  ├─Linear (Dense)             [2, 256]               131,328     True
+│  ├─Highway                    [2, 256]               66,048      True
+│  ├─Dropout                    [2, 256]               0           True
+│  ├─Linear (Dense)             [2, 128]               32,896      True
+│  ├─Highway                    [2, 128]               16,384      True
+│  ├─Dropout                    [2, 128]               0           True
+│  ├─Linear (Dense)             [2, 128]               16,512      True
+│  ├─Highway                    [2, 128]               16,384      True
+│  ├─Dropout                    [2, 128]               0           True
+│  ├─Linear (Dense)             [2, 64]                8,256       True
+│  ├─Highway                    [2, 64]                8,192       True
+│  ├─Dropout                    [2, 64]                0           True
+│  ├─Linear (Dense)             [2, 32]                2,080       True
+│  ├─Highway                    [2, 32]                2,048       True
+├─Output (Linear)               [2, 6]                 198         True
+==========================================================================================
+Total params:  ~695,259
+Trainable params: ~695,259
+Non-trainable params: 0
+==========================================================================================
+
+Input shape: [batch, num_sentences, embedding_dim], e.g., [2, 5, 768] (if using SBERT-base).
+Sentence-level BiLSTMs + Highway: These now do all the “contextualizing” work—no word-level RNN.
+No TransformerEncoder: Because SBERT did that up front.

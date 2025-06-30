@@ -7,7 +7,7 @@ It combines state-of-the-art natural language processing, emotion detection, and
 
 ## Quick Overview
 
-- **Emotion-Aware:** Uses transformer-based classification and advanced trend tracking to monitor user emotion in real time.
+- **Emotion-Aware:** Uses transformer-based classification (GoEmotions, 28 classes) and advanced trend tracking to monitor user emotion in real time.
 - **Memory-Augmented:** Employs both short- and long-term conversational memory, combining detailed recent exchanges with high-level summaries of session history.
 - **Modular:** Each core component (emotion classifier, memory, trend tracker, chatbot, etc.) can be swapped or extended independently.
 - **Research-Ready:** Designed for easy prototyping, clear documentation, and transparency.
@@ -17,16 +17,16 @@ It combines state-of-the-art natural language processing, emotion detection, and
 ## Key Features
 
 - **EmotionClassifier:**  
-  - Cleans and analyzes user input at the character level (BiGRU), then classifies emotions using a transformer autoencoder.
-  - Outputs a 6D probability vector, tracks per-class derivatives, and maintains an EMA-based emotional trend.
+  - Cleans and analyzes user input at the character level (BiGRU), then classifies emotions using a transformer autoencoder trained on GoEmotions (28 categories, multi-label).
+  - Outputs a 28D probability vector, tracks per-class derivatives, and maintains an EMA-based emotional trend.
 
 - **MemoryModule:**  
   - **STM (Short-Term Memory):** Holds the last 10 user/bot exchanges, providing rich context for reasoning and summarization.
   - **LTM (Long-Term Memory):** Stores summaries of prior conversations as "blocks," rotating as needed for efficient scaling.
-  - **TrendTracker:** Lightweight, real-time emotion tracking with nonlinear recency bias via EMA.
+  - **TrendTracker:** Lightweight, real-time emotion tracking with nonlinear recency bias via EMA (all 28D vectors).
 
 - **HAN (Hierarchical Attention Network):**  
-  - Deep context modeling of recent conversation using GloVe, word2vec, and learned embeddings for STM window.
+  - Deep context modeling of recent conversation using GloVe (300d), custom word2vec (350d, trained on clinical dialogues), and learned embeddings (374d, from GoEmotions); concatenated and projected to 512d at model input.
 
 - **Pipeline:**  
   - At each user turn, the system fuses STM, LTM, trend signals, and HAN output to drive decision-making and response generation.
@@ -37,18 +37,20 @@ It combines state-of-the-art natural language processing, emotion detection, and
 
 project_therapy/
 ├── datasets/ # Training/evaluation data
+│   ├── GoEmotions/ # 28-category emotion-labeled Reddit data
+│   ├── clinical_dialogues/ # Patient-therapist real-world conversations
+│   └── legacy_datasets/ # Obsolete (e.g., 6-class emotion dataset)
 ├── ideas/
-│ ├── legacy/ # Archived diagrams, old flows, experimental code
-│ └── simple_emotion_trend_algorithm_plan.md
-│ └── ...other idea files...
+│   ├── legacy_ideas/ # Archived diagrams, old flows, experimental code
+│   └── simple_emotion_trend_algorithm_plan.md
+│   └── ...other idea files...
 ├── ideas/component_specific_ideas/
-│ └── emotion_classifier_logic.md
-│ └── memory_module_logic.md
-│ └── chatbot_logic.md (stub)
-│ └── decision_maker_logic.md (stub)
+│   └── emotion_classifier_logic.md
+│   └── memory_module_logic.md
+│   └── chatbot_logic.md (stub)
+│   └── decision_maker_logic.md (stub)
 ├── README # This file
 └── ...code, scripts, and other folders as added...
-
 
 ---
 
@@ -57,7 +59,7 @@ project_therapy/
 1. **Install dependencies** (details to come as code is released)
 2. **See** `ideas/component_specific_ideas/emotion_classifier_logic.md` and `memory_module_logic.md` for detailed documentation of the core pipeline.
 3. **Check** `ideas/simple_emotion_trend_algorithm_plan.md` for the math, rationale, and pseudocode behind the TrendTracker module.
-4. **Legacy** designs and experiments live in `ideas/legacy/` for historical reference and inspiration.
+4. **Legacy** designs and experiments live in `ideas/legacy_ideas/` for historical reference and inspiration.
 
 ---
 
@@ -66,20 +68,19 @@ project_therapy/
 **Current main data flow:**  
 User Input
 │
-└──> BiGRU Cleaner (character-level) ──> EmotionClassifier (transformer autoencoder)
+└──> EmotionClassifier (transformer autoencoder)
 │
 └──> TrendTracker (EMA-based, rolling 10 steps)
 │
 └──> STM (last 10 user/bot pairs, plain text)
 │
-└──> HAN (word-level, GloVe + word2vec + learned embeddings, BiLSTM/attention)
+└──> HAN (word-level, GloVe + word2vec + learned embeddings + character-level BiGRU, BiLSTM/attention)
 │
 └──> LTM (rotating buffer of 10 summary blocks, from seq2seq over STM)
 │
 └──> DecisionMaker (future module)
 │
 └──> Chatbot Engine (future module)
-
 
 ---
 
@@ -114,3 +115,4 @@ To be determined.
 ## Contact
 
 - Maintainer: [Dan Santoro (Dantoro)](mailto:danrsantoro@gmail.com)
+
