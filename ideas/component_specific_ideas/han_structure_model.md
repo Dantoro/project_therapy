@@ -11,9 +11,9 @@ This file canonizes the current best design for the Hierarchical Attention Netwo
 The HAN integrates four sources of embeddings:
 
 - **GloVe**: 300d, trained on general English text (for broad semantic context)
-- **word2vec**: 360d, custom-trained on clinical dialogues (for domain-specific, localized meaning)
+- **word2vec**: 340d, custom-trained on clinical dialogues (for domain-specific, localized meaning)
 - **BiGRU (character-level)**: 64d, run per word to boost robustness to typos, rare tokens, and subtle subword features
-- **Learned embeddings**: 340d, learned during model training (initialized on GoEmotions dataset)
+- **Learned embeddings**: 320d, learned during model training (initialized on GoEmotions dataset)
 
 These are concatenated, forming a 1024-dimensional per-word representation, projected down to 512d for model efficiency.
 
@@ -136,4 +136,3 @@ Output (final)                            [batch, 128]              varies
 - This design is subject to change as more empirical results become available.
 - For maximal clarity, keep all dimensionality and data source details up to date in this file.
 - Document major architectural changes as a new dated section at the bottom of this file.
-
