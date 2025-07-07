@@ -1,6 +1,6 @@
-# Hierarchical Attention Network (HAN) Structure Model
+# Hierarchical Attention Network (HAN) Model
 
-**Last updated: 2025-06-30**
+**Last updated: 2025-07-07**
 
 ---
 
@@ -12,7 +12,7 @@ The HAN integrates four sources of embeddings:
 
 - **GloVe**: 300d, trained on general English text (for broad semantic context)
 - **word2vec**: 340d, custom-trained on clinical dialogues (for domain-specific, localized meaning)
-- **BiGRU (character-level)**: 64d, run per word to boost robustness to typos, rare tokens, and subtle subword features
+- **CNN**: 64d, character-level vector to catch typos and gain insight from patterns in writing style (see cnn_model.md).
 - **Learned embeddings**: 320d, learned during model training (initialized on GoEmotions dataset)
 
 These are concatenated, forming a 1024-dimensional per-word representation, projected down to 512d for model efficiency.
@@ -33,11 +33,11 @@ This deep, regularized, multi-granular HAN provides the main context vector for 
 
 ### PREPROCESSING:
 
-- **0. Input + GloVe (300) + word2vec (360) + BiGRU (64):**
+- **1. Input + GloVe (300) + word2vec (340) + CNN (64) + Learned embeddings (320):**
+
   - All four embedding sources are concatenated for each word (1024d total)
-- **1. Learned embeddings (340):**
-  - Trainable, initialized on GoEmotions; further tuned in context
 - **2. Dense 1 (Decay 1024 → 512):**
+
   - Projects concatenated embeddings down to 512d (includes batch normalization, L2 regularization)
 
 ### WORD-LEVEL (Steady state at 512):
@@ -101,14 +101,13 @@ summary(model, input_size=(batch_size, seq_len, word_len))
 
 **Example (illustrative only):**
 
-```
 ====================================================================================
 Layer (type:depth-idx)                    Output Shape              Param #
 ====================================================================================
 Embedding (GloVe)                         [batch, seq, 300]         0 (frozen)
-Embedding (word2vec)                      [batch, seq, 360]         0 (frozen)
-BiGRU (char-level)                        [batch, seq, 64]          65,000
-LearnedEmbedding                          [batch, seq, 340]         ~2M
+Embedding (word2vec)                      [batch, seq, 340]         0 (frozen)
+CNN (char-level)                          [batch, seq, 64]          65,000
+LearnedEmbedding                          [batch, seq, 320]         ~2M
 Dense (proj)                              [batch, seq, 512]         524,800
 BatchNorm1d                               [batch, seq, 512]         1,024
 WordBiLSTM-1                              [batch, seq, 512]         2M
@@ -127,7 +126,6 @@ Dropout                                   [batch, 256]              0
 Dense-4                                   [batch, 128]              32,896
 Output (final)                            [batch, 128]              varies
 ====================================================================================
-```
 
 ---
 

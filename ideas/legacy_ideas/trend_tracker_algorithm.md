@@ -46,4 +46,3 @@ def update_trend(new_vec, last_vec, last_ema, alpha=0.5):
 
 - To match GoEmotions’ 28 categories for maximal nuance in trend analysis
 - Enables tracking of both primary and subtle emotional shifts over time
-

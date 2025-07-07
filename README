@@ -74,7 +74,7 @@ User Input
 │
 └──> STM (last 10 user/bot pairs, plain text)
 │
-└──> HAN (word-level, GloVe + word2vec + learned embeddings + character-level BiGRU, BiLSTM/attention)
+└──> HAN (word-level, GloVe + word2vec + learned embeddings + character-level CNN, BiLSTM/attention)
 │
 └──> LTM (rotating buffer of 10 summary blocks, from seq2seq over STM)
 │
