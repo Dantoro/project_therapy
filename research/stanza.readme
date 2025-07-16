@@ -1,0 +1,45 @@
+Found this and thought it was cool and maybe worth looking into.
+
+https://stanfordnlp.github.io/stanza/index.html
+
+"Stanza is a Python natural language analysis package. It contains tools, which can be used in a pipeline, to convert a string containing human language text into lists of sentences and words, to generate base forms of those words, their parts of speech and morphological features, to give a syntactic structure dependency parse, and to recognize named entities. The toolkit is designed to be parallel among more than 70 languages, using the Universal Dependencies formalism.
+
+Stanza is built with highly accurate neural network components that also enable efficient training and evaluation with your own annotated data. The modules are built on top of the PyTorch library. You will get much faster performance if you run the software on a GPU-enabled machine."
+
+
+there's also a biomedical/clinical model that sounded especially interesting:
+
+"In this section, we cover the biomedical and clinical syntactic analysis and named entity recognition models offered in Stanza. We also report their performance, comparisons to other tools, and how to download and use these packages.
+
+For more detailed information on how we created these models and our analysis of them, please check out our biomedical models system description paper presented in JAMIA:"
+
+https://watermark.silverchair.com/ocab090.pdf?token=AQECAHi208BE49Ooan9kkhW_Ercy7Dm3ZL_9Cf3qfKAc485ysgAAA1AwggNMBgkqhkiG9w0BBwagggM9MIIDOQIBADCCAzIGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMU5adked8F07Earc6AgEQgIIDA_znajwFK9mZbeo65PrCr_BIHUgsM4ib4OCtqQG20Tkr9dHBuQC1vKfhCrkLWJcm-kI0vr55bqiZ8RHFSVbALOSEvOc9vjO0P2-apPFdZo0T3MZi2rE-g3v4vsEy4jk0kuJgE7VMS5Ux2ePLAAjvbYZAn2hJZZOeTEKmy2naGybQp-WHUYvvKDClE8XJ14IRjMJQ4kJvTkvM4q0BXYeN8_GjQg2-BVOdbvR3uu4p7GVfJ6JxvcRRoXPD6yr5PhUuWaJdaUwXEfleQGU3BfBpQmd5a9ExKQWA3qi6WUXOUIBBmIjV-YFEVtlqLuFuCjNvyluAs3ZcyGn1HLO-xBcLfRpttIhbaqSQWBIUbnm01DeEJG-RbDS7rNzMzcGKyWKF1DCw-oXZh1wq9RTsqYiWDADzSIcL2iibx2zXBDY9vOH96Z0ohYBTpfUDiiV1SrP3EHEuSeWlfPy5NUYMpftl9ZqpXzz9xb8hGi1_aulYFZVo25iPS4vGF_2IQ9soSX6_nzWpEG77A7m49fB98dFUZmxPHsqDul1U3rUsYHfWzrVCHXR7izfMj1_-Q9uT1IEmhcFXqOPw8S9pTV4YA8vy2b1sg-pMN14Nuzlg7QL4GkyaRyTTIasThOJQ0nNs3FwNj_7pgNxZtV2HmeSsY7_yAZuhaKSc8rEq8b7x67V2q0nl0ufSYnQNdm5ZKBK5z3K218ijW6xIyv68REJb4Zqa9we_M--e88fUaw-dwxqd-NZxNmcCON_0VPEKpuVJXCUnny5Bmvdph72x_N-mWCYU7LGEk1_WHgtynJ3KvV7s9jWDf-615Ub_AhxHDyEpmDgNby-_96tLEXz-XHQdSrsnAK13ffytbgmqIzCj-S0oYlsgrpqp4Q2XUhvcpwwbp-eftz9PwzpSX7c7v3vvylc0biDoM1_PT_zaV79zzQSqsecgvgsQlkiAg2q4VkPdVRjtV6jtlc3waHi1sd6m1fMDYrrzqiXBddC49e0StmPNGm9jBi2o-VTN2UXRJ5VbfD-l49wRPg
+
+
+"License
+
+Stanza is licensed under the Apache License, Version 2.0 (the “License”); you may not use the software package except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Main Contributors
+
+The PyTorch implementation of Stanza’s neural pipeline is due to Peng Qi, Yuhao Zhang, and Yuhui Zhang, with help from Jason Bolton, Tim Dozat and John Bauer. John Bauer currently leads the maintenance of this package.
+
+The CoreNLP client was mostly written by Arun Chaganty, and Jason Bolton spearheaded merging the two projects together.
+
+We are also grateful to community contributors for their help in improving Stanza.
+
+Citing Stanza in papers
+
+If you use Stanza in your work, please cite this paper:
+
+Peng Qi, Yuhao Zhang, Yuhui Zhang, Jason Bolton and Christopher D. Manning. 2020. Stanza: A Python Natural Language Processing Toolkit for Many Human Languages. In Association for Computational Linguistics (ACL) System Demonstrations. 2020. [pdf][bib]
+
+If you use the biomedical and clinical model packages in Stanza, please also cite our JAMIA biomedical models paper:
+
+Yuhao Zhang, Yuhui Zhang, Peng Qi, Christopher D. Manning, Curtis P. Langlotz. Biomedical and Clinical English Model Packages in the Stanza Python NLP Library, Journal of the American Medical Informatics Association. 2021.
+
+If you use Stanford CoreNLP through the Stanza python client, please also follow the instructions here to cite the proper publications."
