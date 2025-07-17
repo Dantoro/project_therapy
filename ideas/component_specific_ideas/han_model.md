@@ -1,137 +1,80 @@
 # Hierarchical Attention Network (HAN) Model
 
-**Last updated: 2025-07-07**
+**Last updated: 2025-07-16**
 
 ---
 
 ## Overview
 
-This file canonizes the current best design for the Hierarchical Attention Network (HAN) at the core of Project Therapy. The HAN is responsible for deep context modeling of recent conversation history—synthesizing the 21 most recent entries (10 user-bot pairs + latest user input), each entry potentially spanning multiple sentences. This structure enables highly nuanced understanding of patient dialogue, emotional context, and conversational flow, ultimately driving the DecisionMaker and Chatbot modules.
+This document describes the architecture of the Hierarchical Attention Network (HAN) for Project Therapy, reflecting all recent changes. The HAN now includes an integrated, tunable character-level CNN as its first processing layer, enabling per-character, per-word, per-sentence, and per-entry representation learning from raw conversation text. There are no longer separate “learned embeddings”—all trainable features are learned as part of the HAN.
 
-The HAN integrates four sources of embeddings:
+## Embedding Sources
 
-- **GloVe**: 300d, trained on general English text (for broad semantic context)
-- **word2vec**: 340d, custom-trained on clinical dialogues (for domain-specific, localized meaning)
-- **CNN**: 64d, character-level vector to catch typos and gain insight from patterns in writing style (see cnn_model.md).
-- **Learned embeddings**: 320d, learned during model training (initialized on GoEmotions dataset)
+Each word in each STM entry is represented by the concatenation of:
 
-These are concatenated, forming a 1024-dimensional per-word representation, projected down to 512d for model efficiency.
+* **GloVe embedding** : 300d (pretrained on general English)
+* **word2vec embedding** : 500d (custom-trained on clinical dialogue)
+* **CNN embedding** : 200d (trainable character-level vector, learned as part of the HAN)
 
-Key regularization and optimization tools used:
-
-- **L2 regularization** on dense and recurrent layers
-- **Batch normalization** after projection and before each major block
-- **Layer normalization** within BiLSTM blocks
-- **Dropout** at all major hidden stages (word-level, entry-level, additional hidden)
-- **Recurrent dropout** inside BiLSTM layers
-
-This deep, regularized, multi-granular HAN provides the main context vector for the DecisionMaker, fused with LTM summaries and trend tracking data for response generation.
-
----
+**Total: 1000 dimensions per word**
 
 ## Full Model Structure
 
 ### PREPROCESSING:
 
-- **1. Input + GloVe (300) + word2vec (340) + CNN (64) + Learned embeddings (320):**
+* **1. Character-level CNN** (per-entry, first layer of HAN):
+  * Input: Entry text tokenized at the character level
+  * Embedding: 16d trainable vector per character
+  * Convolutions: Parallel 1D filters (recommended: widths 3, 5, 7; total 200 filters)
+  * Global max pooling over each filter
+  * Output: 200d vector summarizing style and character-level patterns
+  * Shared across all words in the entry
+* **2. Embedding concatenation** :
+* For each word: [CNN output (200d)] + [GloVe (300d)] + [word2vec (500d)] → 1000d
+* **3. Dense projection** :
+* Linear layer, projects 1000d → 512d (includes batch normalization, L2 regularization)
 
-  - All four embedding sources are concatenated for each word (1024d total)
-- **2. Dense 1 (Decay 1024 → 512):**
+### WORD-LEVEL (512d per word):
 
-  - Projects concatenated embeddings down to 512d (includes batch normalization, L2 regularization)
+* **4. Word BiLSTM 1** : Bidirectional LSTM, hidden size 512 (with recurrent dropout and layer norm)
+* **5. Highway 1** : Enables flexible information routing
+* **6. Dropout 1** : Standard dropout
+* **7. Word BiLSTM 2**
+* **8. Word attention** : Multi-head attention aggregates word context into sentence vectors
 
-### WORD-LEVEL (Steady state at 512):
+### SENTENCE-LEVEL (512d per sentence):
 
-- **3. Word BiLSTM 1:**
-  - BiLSTM (hidden size: 512); recurrent dropout; layer norm
-- **4. Highway 1:**
-  - Enables information routing, mitigates vanishing gradient
-- **5. Dropout 1:**
-  - Standard dropout (rate ≈ 0.3–0.5)
-- **6. Word BiLSTM 2:**
-  - Stacked for increased capacity
-- **7. Word attention:**
-  - Multi-head attention aggregates word context into entry vectors
+* **9. Sentence BiLSTM 1** : Processes sequence of sentence vectors within each entry
+* **10. Highway 2**
+* **11. Dropout 2**
+* **12. Sentence BiLSTM 2**
+* **13. Sentence attention** : Multi-head attention over sentences in the entry, outputs entry vector
 
-### ENTRY-LEVEL (Steady state at 512):
+### ENTRY-LEVEL (512d per entry):
 
-- **8. Entry BiLSTM 1:**
-  - Processes sequences of entry vectors across STM
-- **9. Highway 2**
-- **10. Dropout 2**
-- **11. Entry BiLSTM 2**
-- **12. Entry attention:**
-  - Multi-head attention over entry representations
+* **14. Entry BiLSTM 1** : Processes sequence of entry vectors across STM buffer
+* **15. Highway 3**
+* **16. Dropout 3**
+* **17. Entry BiLSTM 2**
+* **18. Entry attention** : Multi-head attention over entry representations
 
-### ADDITIONAL HIDDEN LAYERS:
+### FINAL PROJECTION:
 
-- **13. Dense 3 (decay 512 → 256)**
-- **14. Highway 3**
-- **15. Dropout 3**
-- **16. Dense 4 (decay 256 → 128)**
-
-### RESULTS:
-
-- **17. Output layer (128d):**
-  - Main summary/context vector for DecisionMaker/Chatbot
-
----
-
-## Layer-wise Function
-
-- **Input + Embeddings**: Brings together general, domain, typo-robust, and trainable representations for rich word-level context.
-- **Projection**: Reduces to a tractable size while retaining as much information as possible.
-- **Word-level BiLSTMs + attention**: Capture intra-entry dependencies and focus attention on key words per entry.
-- **Entry-level BiLSTMs + attention**: Model sequence of conversation turns, focus on most relevant exchanges.
-- **Highways**: Allow the network to dynamically route information across layers.
-- **Dropout/regularization**: Prevent overfitting, encourage robust learning.
-- **Final output**: Fixed-size, context-rich vector handed off to downstream modules.
+* **19. Dropout 4** : Dropout before output layer (rate ≈ 0.2–0.3 recommended)
+* **20. Output layer (Dense 512 → 256)** : Produces final context vector for DecisionMaker
 
 ---
 
-## PyTorch Visualization Example
+## Key Points
 
-While PyTorch does not have a direct `model.summary()` equivalent, you can use [torchsummary](https://github.com/sksq96/pytorch-summary) or [torchinfo](https://github.com/TylerYep/torchinfo) for similar output. Example:
-
-```python
-from torchinfo import summary
-model = HAN(...)  # your HAN instance
-summary(model, input_size=(batch_size, seq_len, word_len))
-```
-
-**Example (illustrative only):**
-
-====================================================================================
-Layer (type:depth-idx)                    Output Shape              Param #
-===========================================================================
-
-Embedding (GloVe)                         [batch, seq, 300]         0 (frozen)
-Embedding (word2vec)                      [batch, seq, 340]         0 (frozen)
-CNN (char-level)                          [batch, seq, 64]          65,000
-LearnedEmbedding                          [batch, seq, 320]         ~2M
-Dense (proj)                              [batch, seq, 512]         524,800
-BatchNorm1d                               [batch, seq, 512]         1,024
-WordBiLSTM-1                              [batch, seq, 512]         2M
-Highway-1                                 [batch, seq, 512]         263,168
-Dropout                                   [batch, seq, 512]         0
-WordBiLSTM-2                              [batch, seq, 512]         2M
-WordAttention                             [batch, 512]              262,144
-EntryBiLSTM-1                             [batch, STM, 512]         2M
-Highway-2                                 [batch, STM, 512]         263,168
-Dropout                                   [batch, STM, 512]         0
-EntryBiLSTM-2                             [batch, STM, 512]         2M
-EntryAttention                            [batch, 512]              262,144
-Dense-3                                   [batch, 256]              131,328
-Highway-3                                 [batch, 256]              131,328
-Dropout                                   [batch, 256]              0
-Dense-4                                   [batch, 128]              32,896
-Output (final)                            [batch, 128]              varies
-==========================================================================
+* All embeddings (CNN, GloVe, word2vec) are concatenated per word; the CNN vector is the same for every word in the entry
+* CNN output is not cached; it is recalculated every timestep as part of HAN training/inference
+* The HAN provides context at character, word, sentence, entry, and document (STM buffer) levels
+* All trainable features (CNN, BiLSTMs, dense layers) are updated together during end-to-end training
 
 ---
 
-## Notes
+## Change Log
 
-- This design is subject to change as more empirical results become available.
-- For maximal clarity, keep all dimensionality and data source details up to date in this file.
-- Document major architectural changes as a new dated section at the bottom of this file.
+* 2025-07-16: Full HAN update—character-level CNN is now internal, learned embeddings removed, embedding dimensions finalized
+* 2025-07-07: (legacy) Used cached CNN, separate learned embedding, different dimensions

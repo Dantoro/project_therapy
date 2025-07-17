@@ -8,26 +8,25 @@ The Trend Tracker maintains a continuous, quantitative summary of the user’s r
 
 **Inputs:**
 
-- 28d vector (GoEmotions probabilities) from the EmotionClassifier for each user input
-- 6d vector (Ekman categories) derived from the same 28 classes, using a static mapping
+- 35d regression_vector (28d emotion_vector + 7d ekman_vector))
 - Rolling buffer: Last 10 user entries
 
 **Outputs:**
 
 - For each user input, internally store (as a single row):
   - `current_emotion_vector` (28d)
-  - `current_ekman_vector` (6d)
+  - `current_ekman_vector` (7d)
   - `current_emotion_1st_deriv` (28d)
-  - `current_ekman_1st_deriv` (6d)
+  - `current_ekman_1st_deriv` (7d)
   - `current_emotion_2nd_deriv` (28d)
-  - `current_ekman_2nd_deriv` (6d)
+  - `current_ekman_2nd_deriv` (7d)
   - `ema_emotion_vector` (28d)
-  - `ema_ekman_vector` (6d)
+  - `ema_ekman_vector` (7d)
   - `ema_emotion_1st_deriv` (28d)
-  - `ema_ekman_1st_deriv` (6d)
+  - `ema_ekman_1st_deriv` (7d)
   - `ema_emotion_2nd_deriv` (28d)
-  - `ema_ekman_2nd_deriv` (6d)
-- These can be concatenated into a single 204d vector per row for passing to the DecisionMaker.
+  - `ema_ekman_2nd_deriv` (7d)
+- These can be concatenated into a single 210d vector per row for passing to the DecisionMaker.
 
 **Public/Human-Readable Output:**
 
@@ -49,12 +48,12 @@ The Trend Tracker maintains a continuous, quantitative summary of the user’s r
 On each new user input:
 
 1. Append new emotion vector to rolling buffer (10 most recent rows)
-2. Compute for both 28d (emotions) and 6d (Ekman):
+2. Compute for both 28d (emotions) and 7d (Ekman):
    - **First derivative:** Change from previous row (local slope)
    - **Second derivative:** Change in slope (acceleration)
    - **EMA:** Exponential moving average (with tunable α)
    - **EMA derivatives:** As above, but on EMA
-3. Store all results in a single row of the tracker (shape: [10 rows, 204 columns])
+3. Store all results in a single row of the tracker (shape: [10 rows, 210 columns])
 4. Human-readable columns are derived from argmax/top-k in the current and EMA vectors (for both emotion and Ekman categories)
 
 ## Usage Notes
@@ -71,5 +70,3 @@ On each new user input:
 - Buffer length, EMA α, and derivative order are tunable hyperparameters
 
 ---
-
-This version supersedes the earlier “trend_tracker_algorithm.md” and describes the full 204d vector output as well as the public summary. All details reflect current use in Project Therapy as of July 2025.
