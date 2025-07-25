@@ -9,7 +9,7 @@ The Trend Tracker maintains a continuous, quantitative summary of the user’s r
 **Inputs:**
 
 - 35d regression_vector (28d emotion_vector + 7d ekman_vector))
-- Rolling buffer: Last 10 user entries
+- Rolling buffer: Last 10 user utterances
 
 **Outputs:**
 
@@ -60,7 +60,7 @@ On each new user input:
 
 - **Internally:** Only the most recent row is required for DecisionMaker; the full buffer can be passed for richer context, but is usually unnecessary
 - **Externally:** Only the 10 human-readable summary columns are displayed
-- **No chatbot responses** are fed into the trend tracker—only user entries
+- **No chatbot responses** are fed into the trend tracker—only user utterances
 - Confidence values are for display and are not passed as additional features
 
 ## Implementation Details

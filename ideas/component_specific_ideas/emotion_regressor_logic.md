@@ -19,17 +19,17 @@ This ensemble approach leverages the strengths of both fine-grained and broad em
 
 ## Model Details
 
-### 1.** ****Discrete Emotion Model (GoEmotions-based)**
+### 1. **Discrete Emotion Model (GoEmotions-based)**
 
 * **Model:** [SamLowe/roberta-base-go_emotions](https://huggingface.co/SamLowe/roberta-base-go_emotions)
 * **Classes:** 28 emotions + neutral
 * **Training Data:** Google’s GoEmotions dataset (Demszky et al., 2020) — 58k Reddit comments labeled for 28 nuanced emotions. Highly diverse, covers a wide spectrum of social media language, slang, and ambiguous affect.
 * **Why included:** Provides nuanced emotional insight; sensitive to internet speech, casual tone, and fine shades of sentiment that are underrepresented in formal text datasets.
 
-### 2.** ****Ekman Emotion Model (Hartmann-based)**
+### 2. **Ekman Emotion Model (Hartmann-based)**
 
 * **Model:** [j-hartmann/emotion-english-roberta-large](https://huggingface.co/j-hartmann/emotion-english-roberta-large)
-* **Classes:** 6 classic Ekman categories (anger, disgust, fear, joy, sadness, surprise)** ****plus neutral** (7 total)
+* **Classes:** 6 classic Ekman categories (anger, disgust, fear, joy, sadness, surprise) **plus neutral** (7 total)
 * **Training Data:** Aggregated from six major emotion corpora, spanning social media, dialogues, and emotion-annotated datasets. The full list includes:
   1. **Crowdflower (2016):** Short social media posts/tweets, labeled for emotion (crowdsourced).
   2. **Emotion Dataset / Saravia et al. (2018) & Elvis et al. (2018):** SMS, blogs, news headlines, and forum text — diverse genres, global English.
@@ -44,10 +44,10 @@ This ensemble approach leverages the strengths of both fine-grained and broad em
 
 ## Ensemble Construction
 
-* Both models are applied** ****in parallel** to every input (user text or chatbot output).
-* Their output vectors are concatenated, yielding a** ** **35d mood vector** : 28 GoEmotions + 7 Ekman/neutral.
+* Both models are applied **in parallel** to every input (user text or chatbot output).
+* Their output vectors are concatenated, yielding a **35d mood vector**: 28 GoEmotions + 7 Ekman/neutral.
 * This mood vector provides both highly specific and broadly generalized emotional information.
-* The vector is immediately fed to the** ****TrendTracker** module, which computes derivatives, moving averages, and other features over recent inputs to build a time-aware profile of user emotion.
+* The vector is immediately fed to the **TrendTracker** module, which computes derivatives, moving averages, and other features over recent inputs to build a time-aware profile of user emotion.
 
 ---
 
@@ -67,7 +67,7 @@ This ensemble approach leverages the strengths of both fine-grained and broad em
 ## Output
 
 * **Dimension:** 35d (per input)
-* **Interpretation:** Each dimension is a confidence score (0–1) for a specific emotion or category. Sum does** ****not**necessarily equal 1.
+* **Interpretation:** Each dimension is a confidence score (0–1) for a specific emotion or category. Sum does*not* necessarily equal 1.
 * **Next step:** The mood vector is passed to TrendTracker for further emotional calculus and tracking.
 
 ---

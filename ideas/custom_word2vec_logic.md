@@ -30,28 +30,28 @@ Custom word2vec embeddings are trained on a blended corpus of four open-source d
    * 300 pairs of anonymized patient-doctor messages
    * Each row contains a doctor’s input and a patient’s reply, and a binary variable indicating whether or not the patient shows signs of depression
    * Used here for data augmentation; small, but authentic
-   * **Format:** Each row contains two separate dialogue entries (doctor, patient)
+   * **Format:** Each row contains two separate dialogue utterances (doctor, patient)
 2. **Mental Health Counseling Conversations** ([Kaggle](https://www.kaggle.com/datasets/melissamonfared/mental-health-counseling-conversations-k))
    * ~3,500 pairs of real counseling sessions, anonymized
-   * Each row:** **`user` and** **`counselor` columns with conversational turns
+   * Each row: `user` **and** `counselor` columns with conversational turns
    * Focused on a wide range of mental health topics
-   * **Format:** Two entries per row (one from each speaker)
-3. **AnnoMI: Annotated Motivational Interviewing Conversations** ([Kaggle](https://www.kaggle.com/datasets/rahulbaburaj/annomi),** **[GitHub](https://github.com/uccollab/AnnoMI))
+   * **Format:** Two utterances per row (one from each speaker)
+3. **AnnoMI: Annotated Motivational Interviewing Conversations** ([Kaggle](https://www.kaggle.com/datasets/rahulbaburaj/annomi), [GitHub](https://github.com/uccollab/AnnoMI))
    * ~9,700 individual utterances from real motivational interviewing sessions
-   * Each row:** **`utterance_text` and** **`speaker_type` (“therapist” or “client”)
+   * Each row: **`utterance_text` and** `speaker_type` (“therapist” or “client”)
    * Annotated for MI quality and conversational type
    * **Format:** Each row is a single utterance
 4. **NLP Mental Health Conversations** ([Kaggle](https://www.kaggle.com/datasets/thedevastator/nlp-mental-health-conversations/data))
    * ~3,500 anonymized counseling dialogues
    * Structure varies: some rows are pairs, some contain grouped turns
-   * **Format:** Must be split into single-utterance entries
+   * **Format:** Must be split into single-utterance utterances
 
 ## Preprocessing and Corpus Preparation
 
-Each dataset is first split into its constituent conversational entries. This means:
+Each dataset is first split into its constituent conversational utterances. This means:
 
-* For datasets with paired dialogue in one row (Depression Detection, Mental Health Counseling, NLP Mental Health),** ****split each row into two separate samples** (one for each speaker)
-* For datasets with grouped entries (some rows contain multi-sentence responses),** ****split into single sentences** for maximal diversity
+* For datasets with paired dialogue in one row (Depression Detection, Mental Health Counseling, NLP Mental Health), **split each row into two separate samples** (one for each speaker)
+* For datasets with grouped utterances (some rows contain multi-sentence responses), **split into single sentences** for maximal diversity
 * For datasets already at the utterance level (AnnoMI), include each row as-is
 
 **Final corpus:**

@@ -17,7 +17,7 @@ The Threat Assessor is a standalone module designed to provide immediate clinica
 
 **Input:**
 
-* The** ***raw text* of the most recent user input (e.g., a single message or utterance).
+* The *raw text* of the most recent user input (e.g., a single message or utterance).
 
 **Output:**
 

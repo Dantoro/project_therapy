@@ -1,4 +1,3 @@
-
 # Chatbot Logic
 
 **Last updated: 2025-07-18**
@@ -37,14 +36,14 @@ The chatbot is the generative component of Project Therapy—responsible for pro
 
 ## Corpus Formatting
 
-* For chatbot pretraining: Format as alternating speaker rows (User, Chatbot) with each entry as a single utterance
-* For word2vec: Split entries further into individual sentences (maximize context diversity)
+* For chatbot pretraining: Format as alternating speaker rows (User, Chatbot) with each utterance as a single utterance
+* For word2vec: Split utterances further into individual sentences (maximize context diversity)
 * Many datasets require preprocessing to ensure compatible formatting
 
 ## Model Selection Factors
 
 * **Mental health/clinical pretraining:** Increases safety and relevance
-* **Token/sequence length:** Must handle multi-turn dialogues, long entries, and context from LTM/SOAP notes
+* **Token/sequence length:** Must handle multi-turn dialogues, long utterances, and context from LTM/SOAP notes
 * **Hardware constraints:** Large models may need to be swapped out for smaller ones on lower-end devices
 
 ## Pros and Cons Summary

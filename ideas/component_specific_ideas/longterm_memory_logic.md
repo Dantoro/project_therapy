@@ -6,7 +6,7 @@
 
 ## Purpose and Overview
 
-LTM (Long-Term Memory) in Project Therapy is a rolling buffer of high-level summaries of prior conversations. Each LTM “block” is generated from 20 STM entries (10 user–chatbot dialogue pairs). Rather than storing raw text, each block is distilled into a clinical SOAP note—an industry-standard for summarizing patient encounters—via a seq2seq transformer such as **MentalBART** or a similar clinical/mental-health-oriented encoder–decoder model.
+LTM (Long-Term Memory) in Project Therapy is a rolling buffer of high-level summaries of prior conversations. Each LTM “block” is generated from 20 STM utterances (10 user–chatbot dialogue pairs). Rather than storing raw text, each block is distilled into a clinical SOAP note—an industry-standard for summarizing patient encounters—via a seq2seq transformer such as **MentalBART** or a similar clinical/mental-health-oriented encoder–decoder model.
 
 * **SOAP notes:** Structured summaries of clinical conversations, consisting of Subjective, Objective, Assessment, and Plan sections. This provides a concise, yet comprehensive, narrative of the most salient issues and interventions discussed in each dialogue window.
 
@@ -16,7 +16,7 @@ LTM (Long-Term Memory) in Project Therapy is a rolling buffer of high-level summ
 * **Clinical interpretability:** Mirrors real-world clinical/therapeutic documentation for easier human review.
 * **Enables both extraction and abstraction:** Summarizes key info but retains enough structure for downstream retrieval/analysis.
 
-### Example SOAP Note (summarizing 20 entries):
+### Example SOAP Note (summarizing 20 utterances):
 
 **S:** The user reports high stress and fatigue due to academic workload (three midterms, group project), poor sleep, difficulty focusing, and feeling isolated. Expresses frustration with lack of group support and frequent parental inquiries about grades and eating habits. Feels overwhelmed and misunderstood by peers.
 
@@ -28,8 +28,8 @@ LTM (Long-Term Memory) in Project Therapy is a rolling buffer of high-level summ
 
 ## Block Structure and Lifecycle
 
-* Each LTM block corresponds to a rolling window of 20 STM entries.
-* LTM holds up to 10 blocks at a time (200 STM entries).
+* Each LTM block corresponds to a rolling window of 20 STM utterances.
+* LTM holds up to 10 blocks at a time (200 STMutterancesutterances).
 * When a new block is created, the oldest is dropped (FIFO).
 
 ## Vectorizing the LTM
@@ -43,7 +43,7 @@ While raw SOAP notes are essential for human- and chatbot-level review, vectoriz
 
 ## Storage and Memory Footprint
 
-* SOAP notes are compact compared to raw STM entries; 10 blocks typically consume a few kilobytes.
+* SOAP notes are compact compared to raw STM utterances; 10 blocks typically consume a few kilobytes.
 * Vectors are small (128–256d float arrays).
 
 ## Why Not Just Use the STM or Clipboard?

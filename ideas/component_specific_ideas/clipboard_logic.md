@@ -6,18 +6,18 @@
 
 ## Purpose and Motivation
 
-The Clipboard is a permanent, queryable memory structure for Project Therapy. It exists to store all clinically-relevant named entities, dependencies, relationships, and key event markers extracted from user dialogue, using a state-of-the-art clinical/biomedical NLP toolkit (Stanza). Unlike the STM (which holds raw conversation), or the LTM (which holds periodic summaries/SOAP notes), the Clipboard preserves a running log of all** ***entities and relationships* found, along with their full occurrence histories (timestamps), for as long as the user interacts with the system.
+The Clipboard is a permanent, queryable memory structure for Project Therapy. It exists to store all clinically-relevant named entities, dependencies, relationships, and key event markers extracted from user dialogue, using a state-of-the-art clinical/biomedical NLP toolkit (Stanza). Unlike the STM (which holds raw conversation), or the LTM (which holds periodic summaries/SOAP notes), the Clipboard preserves a running log of all *entities and relationships* found, along with their full occurrence histories (timestamps), for as long as the user interacts with the system.
 
 ## Why Stanza?
 
-Stanza is a Python NLP toolkit from Stanford, providing highly accurate syntactic analysis and named entity recognition (NER). Project Therapy uses Stanza’s** ** *biomedical and clinical models*, which are specifically trained to recognize symptoms, medications, procedures, anatomy, clinical findings, and other health-relevant information—far beyond what general-purpose NLP tools can provide. This means the Clipboard can track medication mentions, symptoms, interventions, time markers, and even abstract constructs like "coping mechanism" or "treatment adherence."
+Stanza is a Python NLP toolkit from Stanford, providing highly accurate syntactic analysis and named entity recognition (NER). Project Therapy uses Stanza’s *biomedical and clinical models*, which are specifically trained to recognize symptoms, medications, procedures, anatomy, clinical findings, and other health-relevant information—far beyond what general-purpose NLP tools can provide. This means the Clipboard can track medication mentions, symptoms, interventions, time markers, and even abstract constructs like "coping mechanism" or "treatment adherence."
 
 ## What Does the Clipboard Store?
 
 * **Named entities:** Symptoms, interventions, drugs, anatomical terms, mental states, etc.
 * **Relationships and dependencies:** Who did what, to whom, and why (dependency parsing and relation extraction)
 * **Timestamps:** When each entity/relationship was mentioned (chronological, optionally most-recent-first)
-* **Speaker:** Typically only user entries (unless chatbot suggests a concrete intervention or medication)
+* **Speaker:** Typically only user utterances (unless chatbot suggests a concrete intervention or medication)
 
 All data is de-identified and indexed for rapid retrieval by downstream modules.
 
@@ -66,7 +66,7 @@ If needed, it is possible to prune older timestamps for ultra-long-term users, o
 
 ## Stanza Biomedical/Clinical Model
 
-Project Therapy uses Stanza’s** **[biomedical and clinical syntactic analysis and NER models](https://stanfordnlp.github.io/stanza/biomed.html), which are among the most accurate for medical/psychological text. These models are trained on a mix of clinical notes (MIMIC-III), biomedical papers (PubMed), and related corpora, and can detect symptoms, medications, anatomical sites, procedures, mental states, and many more.
+Project Therapy uses Stanza’s [biomedical and clinical syntactic analysis and NER models](https://stanfordnlp.github.io/stanza/biomed.html), which are among the most accurate for medical/psychological text. These models are trained on a mix of clinical notes (MIMIC-III), biomedical papers (PubMed), and related corpora, and can detect symptoms, medications, anatomical sites, procedures, mental states, and many more.
 
 > **Note:** While Stanza’s biomedical model is more focused on physical/clinical entities, it still performs well on many psychological constructs (e.g., stress, anxiety, mood, intervention names), making it well-suited for a digital therapy context.
 
