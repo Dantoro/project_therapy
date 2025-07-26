@@ -1,22 +1,60 @@
-[GitHub - thu-coai/Emotional-Support-Conversation: Data and codes for ACL 2021 paper: Towards Emotional Support Dialog Systems](https://github.com/thu-coai/Emotional-Support-Conversation)
+# Emotional Support Conversations (ESConv) – Subset Extraction README
 
+**Last updated: 2025-07-25**
 
-[README.md · thu-coai/esconv at main](https://huggingface.co/datasets/thu-coai/esconv/blob/main/README.md)
+---
 
+## What is ESConv?
 
-original esconv.json: 910 rows
+The ****Emotional Support Conversations (ESConv)** dataset is a large-scale, multi-turn dialogue corpus originally collected to facilitate research on emotional support in conversational AI. It contains over a thousand annotated conversations between a “seeker” (person experiencing distress or seeking help) and a “supporter” (a volunteer providing emotional support). Each conversation is tagged with a primary** `emotion_type` (e.g., anxiety, sadness, anger) and often covers a wide range of real-world emotional challenges.
 
-valid and test: 195 each
+* **Source:** https://github.com/thu-coai/Emotional-Support-Conversation
 
-train: the same 910 rows as the original
+---
 
-esconv_2: hard to tell, looks a lot bigger. 
+## How was this subset created?
 
-either combine train+test+valid, or use esconv2, and figure out which of these models im actually using between github and huggingface. 
+This repository includes a **highly curated subset** of the ESConv data, extracted and transformed for use as emotionally charged, real-world dialogue for training/evaluating conversational AI (especially as part of a broader dialogue superset for Project Therapy).
 
-huggingface has emotion_types, but github has strategy_types. i might want to get a values_count on one of those, and possibly cross-reference it with the ekman categories, and pick a subset of samples to use.
+### Sampling Protocol
 
+* Only conversations where the **seeker** speaks first were included (for clean context-response structure).
+* A target number of conversations was set for each emotion type, sampled at random *without replacement* from the full set:
+  * anxiety: 40
+  * depression: 40
+  * sadness: 40
+  * anger: 30
+  * fear: 20
+  * shame: 11
+  * disgust: 10
+  * nervousness: 6
+  * jealousy: 1
+  * (pain/guilt were excluded due to lack of eligible samples)
+* The resulting subset comprises **198 full dialogues** with this emotion distribution.
 
-each row has a single dialog column with an entire conversation in it. once we isolate which rows we want, we're gonna have to manually split each cell into its constitution dialog pairs by using the speaker-user and speaker-sys tags. 
+### Preprocessing and Transformation
 
-its gonna be a pain in the neck, and might not be worthwhile. but it could get us a lot more data samples.
+1. **Speaker turn concatenation:** Consecutive utterances by the same speaker were merged into a single turn (to prevent split/incomplete thoughts).
+2. **Context-Response extraction:** Each conversation was decomposed into dyadic pairs:
+   * Each  `Context` is a seeker utterance (after merging).
+   * Each corresponding `Response` is the immediate next supporter utterance.
+   * Only clear seeker→supporter exchanges were retained; all others were discarded.
+3. **Cleaning:** HTML artifacts, escape characters, and line breaks were removed/normalized.
+4. **Result:** The final dataset consists of **2255 context-response pairs**, evenly sourced from across the targeted emotions, and suitable for emotionally-rich, conversational modeling.
+
+---
+
+## Intended Use
+
+* This subset is designed for the *emotionally-charged dialogue* portion of the Project Therapy dialogue superset (10% of the 25k total target set).
+* It is not intended as a clinical/therapeutic dataset, but rather as realistic, everyday conversation centered around emotional support, empathy, and peer-to-peer comfort.
+
+---
+
+## Change Log
+
+* 2025-07-25: Initial extraction and transformation, context-response format, with explicit emotion balancing.
+
+---
+
+For further info or reproduction code, see `emotional_casual_chat_data.ipynb` or contact Daniel Santoro.
