@@ -48,7 +48,7 @@ Project Therapy is a multi-component, research-oriented mental health chatbot sy
 * **STM:** 10 most recent user+chatbot utterance pairs, raw text only
 * **LTM:** 10 block FIFO (summary + dense vector)
 * See memory_module_logic.md
-* **Clipboard:** Uses STANZA to create lookup-dictionary of all important entities, dependencies, and relationships, along with a time-stamped list of all occurences of said entities.
+* **Clipboard:** Uses STANZA to create lookup-dictionary of all important entities, dependencies, and relationships, along with a time-stamped list of all occurrences of said entities.
 
 ### ThreatAssessor
 

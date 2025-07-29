@@ -40,7 +40,7 @@ size_categories:
 
 ### Dataset Summary
 
-This dataset contains conversational pair of questions and answers in a single text related to Mental Health. Dataset was curated from popular healthcare blogs like WebMD, Mayo Clinic and HeatlhLine, online FAQs etc. All questions and answers have been anonymized to remove any PII data and pre-processed to remove any unwanted characters.
+This dataset contains conversational pair of questions and answers in a single text related to Mental Health. Dataset was curated from popular healthcare blogs like WebMD, Mayo Clinic and HealthLine, online FAQs etc. All questions and answers have been anonymized to remove any PII data and pre-processed to remove any unwanted characters.
 
 ### Languages
 
@@ -65,7 +65,7 @@ Hence, this dataset was curated to help finetune a conversational AI bot using t
 
 ### Source Data
 
-This dataset was curated from popular healthcare blogs like WebMD, Mayo Clinic and HeatlhLine, online FAQs etc.
+This dataset was curated from popular healthcare blogs like WebMD, Mayo Clinic and HealthLine, online FAQs etc.
 
 ### Personal and Sensitive Information
 
