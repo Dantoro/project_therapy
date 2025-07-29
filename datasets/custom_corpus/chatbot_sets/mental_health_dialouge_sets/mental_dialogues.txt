@@ -1,0 +1,5 @@
+NLP_mental_health_convos, PAIR, counsel_chat, zahrizhalAli
+
+NLP_mental_health_convos is already set up in Context-Response pairs. PAIR and counsel_chat should be prepped too, in mental_health_chat_data.ipynb.
+
+i'll get started on zahrizhalAli there too. 

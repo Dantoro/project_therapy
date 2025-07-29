@@ -1,5 +1,5 @@
 ---
-source: https://huggingface.co/datasets/ZahrizhalAli/mental_health_conversational_dataset/raw/main/README.md
+source: https://huggingface.co/datasets/ZahrizhalAli/mental_health_conversational_dataset/blob/main/README.md
 
 
 dataset_info:

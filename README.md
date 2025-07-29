@@ -1,4 +1,3 @@
-
 # Project Therapy – README
 
 **Last updated: 2025-07-25**
@@ -30,6 +29,12 @@ Project Therapy is a multi-component, research-oriented mental health chatbot sy
 * Outputs 35d mood vector for current prompt; combines with rolling buffer for 210d TrendTracker feature
 * See emotion_regressor.md for details
 
+### TrendTracker
+
+* Performs mathematical analysis on EmotionRegressor output to expand emotional analysis of a single input into deep analysis of emotion-over-time.
+* 210d vector: [current, EMA, 1st and 2nd derivatives of mood vectors]
+* Only tracks user utterances (not chatbot)
+
 ### HAN (Hierarchical Attention Network)
 
 * End-to-end: char-level CNN → GloVe (300d) → custom word2vec (500d) → Dense (1000d→512d)
@@ -43,11 +48,16 @@ Project Therapy is a multi-component, research-oriented mental health chatbot sy
 * **STM:** 10 most recent user+chatbot utterance pairs, raw text only
 * **LTM:** 10 block FIFO (summary + dense vector)
 * See memory_module_logic.md
+* **Clipboard:** Uses STANZA to create lookup-dictionary of all important entities, dependencies, and relationships, along with a time-stamped list of all occurences of said entities.
 
-### TrendTracker
+### ThreatAssessor
 
-* 210d vector: [current, EMA, 1st and 2nd derivatives of mood vectors]
-* Only tracks user utterances (not chatbot)
+* Looks at only the most recent userPrompt.
+* Urgency classifier as an early warning system.
+
+### DecisionMaker
+
+* Takes in output from all prior components, using a combination of rule-based, retrieval-based, and possibly decision tree-based algorithms to determine how the Chatbot will respond.
 
 ### Chatbot (LLM)
 
@@ -73,6 +83,29 @@ Project Therapy is a multi-component, research-oriented mental health chatbot sy
 * Modular, privacy-focused, and extensible design
 * Multi-granular emotion tracking and contextual memory
 * Explainable architecture for research, portfolio, and potential future publication
+
+## Licensing & Attribution
+
+This repository contains code and datasets under a mix of open (MIT, Apache 2.0, CC0) and research/noncommercial licenses (e.g., Creative Commons BY-NC-SA 4.0).
+
+* **Code** is licensed under the MIT License (see LICENSE.md).
+* **Datasets** are individually licensed. Some are public domain or MIT; others are restricted to research and noncommercial use.
+* If you use any data, models, or code from this repository in research or publications, please see [CITATIONS.md]()for proper attribution.
+
+**Summary of included datasets/models:**
+
+* Emotional Support Conversations ([ESConv](https://github.com/thu-coai/Emotional-Support-Conversation)): CC BY-NC 4.0 (research/noncommercial only)
+* Counsel Chat ([Counsel Chat](https://huggingface.co/datasets/nbertagnolli/counsel-chat)): MIT License
+* NLP Mental Health Conversations ([Kaggle](https://www.kaggle.com/datasets/thedevastator/nlp-mental-health-conversations)): CC0 Public Domain
+* MentalChat16K ([Hugging Face](https://huggingface.co/datasets/ShenLab/MentalChat16K)): Research use only (see dataset page for details)
+* PAIR Dataset ([PAIR - UMichigan](https://lit.eecs.umich.edu/downloads.html#PAIR)): Research use only (see original** **[EMNLP 2022 paper](https://lit.eecs.umich.edu/files/min_pair_2022.pdf))
+* Depression Detection ([Kaggle](https://www.kaggle.com/datasets/ziya07/depression-detection)): CC0 Public Domain
+* AnnoMI ([Kaggle](https://www.kaggle.com/datasets/rahulbaburaj/annomi)): Citation required; see dataset page.
+* GoEmotions ([Google Research](https://github.com/google-research/google-research/tree/master/goemotions)): Apache 2.0 License
+* ZahrizhalAli Mental Health Conversational ([Hugging Face](https://huggingface.co/datasets/ZahrizhalAli/mental_health_conversational_dataset)): Intended for research, check Hugging Face for details.
+* Stanza ([Stanford NLP](https://stanfordnlp.github.io/stanza/)): Apache 2.0 License
+
+See [LICENSE.md](LICENSE.md) for full details and attributions.
 
 ---
 

@@ -1,6 +1,6 @@
 # PAIR Dataset
 
-**PAIR** (Patient–Assistant Interaction Responses) is a dataset designed to support research and development in reflective listening, active listening, and therapeutic conversation modeling. It provides high-quality, human-written responses to patient prompts, demonstrating both ideal and suboptimal counseling dialogue styles.
+**PAIR** (Prompt-Aware margIn Ranking for Counselor Reflection) is a dataset designed to support research and development in reflective listening, active listening, and therapeutic conversation modeling. It provides high-quality, human-written responses to patient prompts, demonstrating both ideal and suboptimal counseling dialogue styles.
 
 ## Contents
 
@@ -24,5 +24,10 @@
 
 ## Source & Licensing
 
-- All responses are **human-written** for research and development in counseling/psychotherapy dialogue systems.
-- If using for publication or redistribution, check the original source or dataset provider for licensing terms.
+- @inproceedings{min-etal-2022-pair,
+  title = "{PAIR}: Prompt-Aware margIn Ranking for Counselor Reflection Scoring in Motivational Interviewing",
+  author = "Min, Do June  and  Pérez-Rosas, Verónica  and  Resnicow, Kenneth  and  Mihalcea, Rada",
+  booktitle = "Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing",
+  year = "2022",
+  url = "https://aclanthology.org/2022.emnlp-main.541"
+  }
