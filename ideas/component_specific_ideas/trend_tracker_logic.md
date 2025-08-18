@@ -1,5 +1,7 @@
 # Trend Tracker Logic
 
+**Last updated: 2025-08-18**
+
 ## Purpose
 
 The Trend Tracker maintains a continuous, quantitative summary of the user’s recent emotional state—tracking not just the latest predicted emotions, but their momentum and trends over time. This is used both for internal state modeling (e.g., the DecisionMaker) and to generate human-readable summaries for the user or clinicians.

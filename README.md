@@ -1,6 +1,6 @@
 # Project Therapy – README
 
-**Last updated: 2025-07-25**
+**Last updated: 2025-08-16**
 
 ---
 
@@ -11,8 +11,8 @@ Project Therapy is a multi-component, research-oriented mental health chatbot sy
 ## Core Pipeline
 
 1. **User Prompt** →
-2. **EmotionRegressor** : Dual transformer regression on latest input (35d: 28 GoEmotions + 7 Ekman categories), outputting mood/confidence vector
-3. **TrendTracker** : Tracks 10 most recent mood_vectors + derivatives (full emotional trend, 210d)
+2. **EmotionRegressor** : Transformer regression on latest input (28d: individual emotions as defined by GoEmotions), outputting mood/confidence vector
+3. **TrendTracker** : Tracks 10 most recent mood_vectors + derivatives (full emotional trend, 168d)
 4. **STM** : Short-term memory buffer of 10 user-chatbot utterance pairs (raw text only)
 5. **HAN** : Hierarchical Attention Network over STM + new prompt, contextually aware, trained end-to-end with internal char-level CNN, GloVe, word2vec
 6. **LTM** : Long-term memory—rolling buffer of 10 seq2seq summaries (dense vectors + SOAP notes)
@@ -25,14 +25,14 @@ Project Therapy is a multi-component, research-oriented mental health chatbot sy
 
 ### EmotionRegressor
 
-* Two transformers: one GoEmotions-based, one Ekman-based
-* Outputs 35d mood vector for current prompt; combines with rolling buffer for 210d TrendTracker feature
+* Transformer: GoEmotions-based
+* Outputs 28d mood vector for current prompt; combines with rolling buffer for 2168d TrendTracker feature
 * See emotion_regressor.md for details
 
 ### TrendTracker
 
 * Performs mathematical analysis on EmotionRegressor output to expand emotional analysis of a single input into deep analysis of emotion-over-time.
-* 210d vector: [current, EMA, 1st and 2nd derivatives of mood vectors]
+* 168d vector: [current, EMA, 1st and 2nd derivatives of mood vectors]
 * Only tracks user utterances (not chatbot)
 
 ### HAN (Hierarchical Attention Network)
@@ -111,6 +111,7 @@ See [LICENSE.md](LICENSE.md) for full details and attributions.
 
 ## Change Log
 
+* 2025-08-18: Changed emotionRegressor from a dual-transformer architecture to a single transformer, removing the 7 columns of Ekman categories and choosing to focus on the individual emotions themselves.
 * 2025-07-25: Major update for new STM/LTM/HAN conventions, batch processing, modular pipeline, dialogue superset definition, documentation formatting
 * 2025-07-16: STM/HAN logic rewrite, emotion tracking clarification
 * 2025-06: (Legacy) Multiple architecture revisions, pre-transformer pipeline
