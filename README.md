@@ -1,6 +1,6 @@
 # Project Therapy – README
 
-**Last updated: 2025-08-16**
+**Last updated: 2025-08-18**
 
 ---
 
