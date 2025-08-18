@@ -14,7 +14,7 @@ It is intended to blend *transparent, explainable logic* (rules-based, decision 
 
 ## Inputs to DecisionMaker
 
-1. **TrendTracker output:** 210d mood vector (emotional trends, velocity, acceleration, EMA)
+1. **TrendTracker output:** 168d mood vector (emotional trends, velocity, acceleration, EMA)
 2. **HAN output:** 256d vector (contextual representation of recent conversation)
 3. **LTM output:** Raw text (SOAP notes of up to 10 LTM blocks) + 128–256d vector representing full LTM
 4. **Clipboard:** Stanza-based dictionary of entities/dependencies/relations with timestamp histories
